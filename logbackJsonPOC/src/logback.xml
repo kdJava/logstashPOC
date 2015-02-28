@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+ <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>C:/testOut.log</file>
+		<encoder class="net.logstash.logback.encoder.LogstashEncoder">
+		<!-- custom fields that will appear in every LoggingEvent like this  -->
+			<customFields>{"appname":"CA","version":"Version 0.1.0-SNAPSHOT","solution":"George"}</customFields>
+			<includeCallerInfo>true</includeCallerInfo>
+			<timeZone>UTC</timeZone>
+		</encoder>
+		
+		<!-- <encoder class="net.logstash.logback.encoder.LogstashAccessEncoder">
+  			<fieldNames>
+    			<fieldsRequestHeaders>@fields.request_headers</fieldsRequestHeaders>
+    			<fieldsResponseHeaders>@fields.response_headers</fieldsResponseHeaders>
+ 	 		</fieldNames>
+		</encoder> -->
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<FileNamePattern>c:/SystemOut.%i.log.zip</FileNamePattern>
+			<MinIndex>1</MinIndex>
+			<MaxIndex>10</MaxIndex>
+		</rollingPolicy>
+
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>100MB</MaxFileSize>
+		</triggeringPolicy>
+	</appender>
+  <root level="all">
+    <appender-ref ref="FILE" />
+  </root>
+</configuration>
