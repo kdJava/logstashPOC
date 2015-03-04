@@ -7,38 +7,37 @@ package logger.main;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
-import logger.context.Content;
-import logger.context.LogContent;
+import logger.context.Logger;
 
 /**
  * logbackJsonPOC
- *
+ * 
  * @author ketandikshit 26-Feb-2015 10:02:28 pm
- *         logger.main.LoggerMain.java--->[LoggerMain.class]
+ * logger.main.LoggerMain.java--->[LoggerMain.class]
  */
 public class LoggerMain {
 
-	private static final String APP_ID = "CA";
-	private static final String ACTION = "parse";
-	private static final String WORKFLOW = "MQListener";
+    private static final String THREAD_NAME = "THREAD-";
 
-	private static final ExecutorService EXECUTOR = Executors
-			.newFixedThreadPool(10);
+    private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(5);
 
-	public static void main(String[] args) {
-		for (int i = 0; i < 10; i++) {
-			final int thrdCnt = i;
-			EXECUTOR.submit(new Runnable() {
-				@Override
-				public void run() {
-					Thread.currentThread().setName("Thread-" + thrdCnt);
-					Content content = new Content();
-					content.hasAppId(APP_ID).forAction(ACTION)
-							.ofWorkflow(WORKFLOW);
-					LogContent logContent = new LogContent(content);
-				}
-			});
-		}
-	}
+    public static void main(String[] args) throws InterruptedException {
+        for (int i = 1; i <= 1000000; i++) {
+            final int thrdCnt = i;
+            EXECUTOR.submit(new Runnable() {
+                @Override
+                public void run() {
+                    Thread.currentThread().setName(THREAD_NAME + thrdCnt);
+                    Logger logContent = new Logger();
+                    logContent.append("@threadName", THREAD_NAME + thrdCnt).log(
+                            "Logging Message for " + THREAD_NAME + thrdCnt);
+                }
+            });
+        }
+
+        EXECUTOR.shutdown();
+        EXECUTOR.awaitTermination(1, TimeUnit.DAYS);
+    }
 }

@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
+<configuration scan="true" scanPeriod="30 seconds">
+<contextName>GeorgeCountryAdaptor</contextName>
+
+<property file="src/conf/variables.properties" />
+<property resource="resource.properties" />
+<timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
+
  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>C:/testOut.log</file>
+		<file>${Error_Dir}/${error.log.prefix}[${app.user}]_${logfileName}</file>
 		<encoder class="net.logstash.logback.encoder.LogstashEncoder">
-		<!-- custom fields that will appear in every LoggingEvent like this  -->
-			<customFields>{"appname":"CA","version":"Version 0.1.0-SNAPSHOT","solution":"George"}</customFields>
+	   <!-- <customFields>{"appname":"CA","version":"Version 0.1.0-SNAPSHOT","solution":"George"}</customFields> -->
 			<includeCallerInfo>true</includeCallerInfo>
 			<timeZone>UTC</timeZone>
 		</encoder>
@@ -14,10 +19,10 @@
     			<fieldsRequestHeaders>@fields.request_headers</fieldsRequestHeaders>
     			<fieldsResponseHeaders>@fields.response_headers</fieldsResponseHeaders>
  	 		</fieldNames>
-		</encoder> -->
-
+		</encoder> --> 
+        
 		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-			<FileNamePattern>c:/SystemOut.%i.log.zip</FileNamePattern>
+			<FileNamePattern>${Error_Dir}/logbackTest.%i.log.zip</FileNamePattern>
 			<MinIndex>1</MinIndex>
 			<MaxIndex>10</MaxIndex>
 		</rollingPolicy>
@@ -27,7 +32,38 @@
 			<MaxFileSize>100MB</MaxFileSize>
 		</triggeringPolicy>
 	</appender>
-  <root level="all">
-    <appender-ref ref="FILE" />
-  </root>
+    
+    <appender name="FILE4" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${Error_Dir}/logstash-FILE4Appender-logFile.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${Error_Dir}/archivedLogs/archived-%d{yyyy-MM-dd_HH-mm,aux}/systemLog-%d{yyyy-MM-dd_HH-mm}.log</fileNamePattern>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>[%date] [%contextName] [%thread] [%level] [%logger{50}] [%file:%line] - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+   
+    
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <timeZone>UTC</timeZone>
+        </encoder>
+    </appender>
+    
+    
+    <include resource="includedSTDOUT2Appender.xml"/> 
+    <include file="src/includedFILE3Appender.xml"/>
+    
+    <root level="all">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="STDOUT2" />
+        <appender-ref ref="FILE3" />
+        <appender-ref ref="FILE4" />
+    </root>
+  
 </configuration>
