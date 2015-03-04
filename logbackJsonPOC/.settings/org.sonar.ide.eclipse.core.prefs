@@ -1,0 +1,5 @@
+eclipse.preferences.version=1
+extraProperties=sonar.jdbc.password\=sonar\r\nsonar.jdbc.username\=sonar\r\nsonar.jdbc.url\=jdbc\:mysql\://localhost\:3306/sonar?useUnicode\=true&characterEncoding\=utf8\r\nsonar.host.url\=http\://myserver\:9000
+projectKey=logbackJsonPOC\:logbackJsonPOC
+serverUrl=http\://duskbuildq1.eb.lan.at\:9000/dashboard/index/at.sitsolutions\:GeorgeCountryAdaptor
+version=2
