@@ -20,10 +20,10 @@ public class LogbackConfigTest {
         LOGGER.info(append("@path", "Test-Path").and(append("@transactionId", "123456789")), "My log message2");
         LOGGER.info("");
         Map<String, String> map = new HashMap<>();
-        map.put("@transactionId", "12234567");
-        map.put("@action", "12234567");
-        map.put("@from", "cassandra");
-        map.put("@to", "importer");
+        map.put("transactionId", "12234567");
+        map.put("action", "12234567");
+        map.put("from", "cassandra");
+        map.put("to", "importer");
         LOGGER.info(appendEntries(map), "My log message5");
         LOGGER.info("");
         LOGGER.error("I have logged this message", new NullPointerException("Test Null-Exception Message3"));
